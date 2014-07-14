@@ -53,11 +53,14 @@ class NginxStatus(LogsterParser):
             raise LogsterParsingException, "regmatch or contents failed with %s" % e
 
     def get_state(self, duration):
-        self.duration = duration
+        if duration != 0:
+            self.duration = duration
 
-        return [
-            MetricObject(s.prop,
-                         (self.metrics[s.prop] / self.duration),
-                         "Responses/sec")
-            for s in status
-        ]
+            return [
+                MetricObject(s.prop,
+                             (self.metrics[s.prop] / self.duration),
+                             "Responses/sec")
+                for s in status
+            ]
+        else:
+            return []
